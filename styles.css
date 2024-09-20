@@ -33,3 +33,20 @@ body {
 .evening {
   background-image: url('./assets/04.jpg');
 }
+
+.clock-and-date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center
+}
+
+.clock {
+  color: #fff;
+  font-size: 6em;
+}
+
+.date {
+  color: #fff;
+  font-size: 2em;
+}
