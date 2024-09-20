@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+#main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background-size: cover;
+    transition: background-image 1s ease-in-out;
+}
+
+.night {
+  background-image: url('./assets/01.jpg');
+}
+
+.morning {
+  background-image: url('./assets/02.jpg');
+}
+
+.day {
+  background-image: url('./assets/03.jpg');
+}
+
+.evening {
+  background-image: url('./assets/04.jpg');
+}
