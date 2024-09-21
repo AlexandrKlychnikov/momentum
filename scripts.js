@@ -63,3 +63,31 @@ setInterval(() => {
 }, 1000);
 
 
+async function fetchWeatherData(position) {
+  try {
+        const { latitude, longitude } = position.coords
+        API_KEY='605a4f6530242597cb90bc04b8f384e9'
+        const response = await fetch(`http://api.weatherstack.com/current?access_key=${API_KEY}&query=Краснодар`);
+        const data = await response.json();
+        console.log(data);
+        const cityNameElement = document.querySelector('.city-name');
+        const tempElement = document.querySelector('.temperature');
+        const conditionElement = document.querySelector('.condition');
+        cityNameElement.textContent = decodeURIComponent(data.location.name);
+        tempElement.textContent = `${Math.round(data.current.temperature)}°C`;
+        const img = document.createElement('img');
+        img.src = data.current.weather_icons;
+        img.style.borderRadius = '50%'
+        conditionElement.appendChild(img);
+        return { /*cityName}*/ temperature /*weatherCondition*/ };
+    } catch (error) {
+        console.log(`Произошла ошибка при получении данных о погоде: ${error.message}`);
+        return null;
+    }
+}
+
+// success, error
+
+
+
+navigator.geolocation.getCurrentPosition(fetchWeatherData)

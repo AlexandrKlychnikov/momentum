@@ -8,17 +8,22 @@
   <body>
     <main id="main-container">
       <section class="weather-widget">
-        <p class="city-name"></p>
-        <p class="temperature"></p>
+        <div class="flex-col">
+          <h2 class="city-name"></h2>
+          <p class="temperature"></p>
+        </div>
         <p class="condition"></p>
       </section>
 
-      <section class="clock-and-date">
-        <p class="clock"></p>
+      <section class="clock-and-date flex-col">
+        <h1 class="clock"></h1>
         <p class="date"></p>
       </section>
 
-      <section class="todo"></section>
+      <section class="todo">
+        <h2 class="todo_header">Надо сделать</h2>
+        <input type="text" name="todo" id="todo">
+      </section>
     </main>
     <script src="scripts.js"></script>
   </body>

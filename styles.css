@@ -5,17 +5,19 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif;
+  color: #fff;
 }
 
 #main-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100%;
-    background-size: cover;
-    transition: background-image 1s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  transition: background-image 1s ease-in-out;
 }
 
 .night {
@@ -34,19 +36,39 @@ body {
   background-image: url('./assets/04.jpg');
 }
 
-.clock-and-date {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center
-}
-
 .clock {
-  color: #fff;
   font-size: 6em;
+  font-weight: normal;
 }
 
 .date {
-  color: #fff;
   font-size: 2em;
+}
+
+.weather-widget {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+}
+
+.city-name, .temperature, .todo_header {
+  font-size: 1.5em;
+  font-weight: normal;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.clock-and-date, .weather-widget {
+  user-select: none;
+}
+
+.todo {
+  margin-bottom: 40px;
 }
