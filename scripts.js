@@ -79,7 +79,6 @@ async function fetchWeatherData(position) {
         img.src = data.current.weather_icons;
         img.style.borderRadius = '50%'
         conditionElement.appendChild(img);
-        return { /*cityName}*/ temperature /*weatherCondition*/ };
     } catch (error) {
         console.log(`Произошла ошибка при получении данных о погоде: ${error.message}`);
         return null;

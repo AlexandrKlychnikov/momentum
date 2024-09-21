@@ -9,6 +9,10 @@ body {
   color: #fff;
 }
 
+section {
+  width: 100%;
+}
+
 #main-container {
   display: flex;
   flex-direction: column;
@@ -45,30 +49,42 @@ body {
   font-size: 2em;
 }
 
-.weather-widget {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 20px;
-  width: 100%;
-}
-
 .city-name, .temperature, .todo_header {
   font-size: 1.5em;
   font-weight: normal;
-}
-
-.flex-col {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin: 0;
 }
 
 .clock-and-date, .weather-widget {
   user-select: none;
 }
 
+.clock-and-date {
+  flex-grow: 1;
+  margin: auto;
+}
+
 .todo {
-  margin-bottom: 40px;
+  flex-grow: 1;
+  margin: auto;
+}
+
+.transparent-input {
+  background: rgba(0,0,0,0.35) !important;
+  color: #fff !important;
+}
+
+.transparent-input::placeholder {
+  color: #fff;
+  font-size: 1.25em;
+}
+
+.form-control{
+  width: 500px;
+}
+
+@media (max-width: 720px) {
+  .form-control {
+    width: 70%;
+  }
 }
