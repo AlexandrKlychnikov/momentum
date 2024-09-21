@@ -21,10 +21,25 @@
         <p class="date m-0"></p>
       </section>
 
-      <section class="todo d-flex flex-column justify-content-center">
+      <section class="todo d-flex flex-column justify-content-start gap-3">
         <div class="d-flex justify-content-center align-items-center">
-          <input class="form-control transparent-input ms-3" type="text" id="custom-text" placeholder="Запланировать">
+          <input class="new-task form-control transparent-input ms-3" type="text" id="custom-text" placeholder="Добавить задачу">
         </div>
+        <ul class="incompleted-tasks d-flex flex-column justify-content-center align-items-center gap-1 m-0 ps-3">
+          <!-- <li class="input-group">
+            <div class="input-group-text bg-transparent">
+              <input class="form-check-input mt-0" type="checkbox" value="">
+            </div>
+            <input type="text" class="form-control transparent-input">
+            <button class="btn btn-outline-secondary" type="button">
+              <img src="./assets/edit.svg" alt="edit">
+            </button>
+            <button class="btn btn-outline-secondary" type="button">
+              <img src="./assets/remove.svg" alt="remove">
+            </button>
+          </li> -->
+        </ul>
+        <ul class="completed-tasks"></ul>
       </section>
     </main>
     <script src="scripts.js"></script>

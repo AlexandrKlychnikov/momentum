@@ -61,17 +61,39 @@ section {
 
 .clock-and-date {
   flex-grow: 1;
-  margin: auto;
+  margin: 100px;
 }
 
 .todo {
   flex-grow: 1;
-  margin: auto;
+  overflow-y: auto;
+}
+
+.todo::-webkit-scrollbar {
+  width: 5px;
+}
+
+.todo::-webkit-scrollbar-track {
+  background: #eee;
+  border-radius: 50%;
+}
+
+.todo::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 10px;
+}
+
+.todo::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
 }
 
 .transparent-input {
-  background: rgba(0,0,0,0.35) !important;
+  background: rgba(0, 0, 0, 0.25) !important;
   color: #fff !important;
+}
+
+.new-task {
+  text-align: center;
 }
 
 .transparent-input::placeholder {
@@ -79,8 +101,29 @@ section {
   font-size: 1.25em;
 }
 
-.form-control{
+.form-control, .input-group{
   width: 500px;
+}
+
+input:focus::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+input:focus {
+  caret-color: #fff;
+}
+
+.btn-outline-secondary:hover, .input-group-text:hover {
+  background-color: rgba(13, 110, 254, 0.5) !important;
+}
+
+.btn-outline-secondary {
+  width: 45px;
+  padding: 0;
+}
+
+.form-check-input:hover {
+  cursor: pointer;
 }
 
 @media (max-width: 720px) {
