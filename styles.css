@@ -88,8 +88,13 @@ section {
 }
 
 .transparent-input {
-  background: rgba(0, 0, 0, 0.25) !important;
+  background: rgba(0, 0, 0, 0.30) !important;
   color: #fff !important;
+  border: none;
+}
+
+.transparent-input:disabled {
+  background: rgba(0, 0, 0, 0.20) !important;
 }
 
 .new-task {
@@ -101,9 +106,11 @@ section {
   font-size: 1.25em;
 }
 
-.form-control, .input-group{
+.form-control, .input-group {
   width: 500px;
 }
+
+
 
 input:focus::-webkit-input-placeholder {
   color: rgba(0, 0, 0, 0.65) !important;
@@ -118,8 +125,14 @@ input:focus {
 }
 
 .btn-outline-secondary {
+  background: rgba(0, 0, 0, 0.20) !important;
   width: 45px;
   padding: 0;
+}
+
+.input-group-text {
+  background: rgba(0, 0, 0, 0.20) !important;
+  border: none;
 }
 
 .form-check-input:hover {

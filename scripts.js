@@ -91,8 +91,8 @@ navigator.geolocation.getCurrentPosition(fetchWeatherData)
 
 // TODO
 const addTaskInput = document.querySelector('.form-control');
-const incompleteTasksBlock = document.querySelector(".incompleted-tasks");
-const completedTasksBlock=document.querySelector(".completed-tasks");
+const incompleteTasksBlock = document.querySelector('.incompleted-tasks');
+const completedTasksBlock=document.querySelector('.completed-tasks');
 
 addTaskInput.addEventListener('keypress', handleEnterPress);
 
@@ -104,51 +104,32 @@ function handleEnterPress(event) {
 
 function createNewTask(taskString) {
   const nodes = {
-    'task': null,
-    'box': null,
-    'checkbox': null,
-    'editInput': null,
-    'editButton': null,
-    'editButtonImg': null,
-    'removeButton': null,
-    'removeButtonImg': null
-  }
-  const htmlElements = ['li', 'div', 'input', 'input', 'button', 'img', 'button', 'img'];
-  const classNames = [
-    'input-group',
-    'input-group-text bg-transparent',
-    'form-check-input mt-0',
-    'form-control transparent-input',
-    'btn btn-outline-secondary',
-    null,
-    'btn btn-outline-secondary',
-    null
-  ];
-  const types = [null, null, 'checkbox', 'text', 'button', null, 'button', null]
-
-  const images = [null, null, null, null, null, { src: "./assets/edit.svg", alt: "edit" }, null, { src: "./assets/remove.svg", alt: "remove"}]
-
-  let i = 0
-  for(let key in nodes) {
-    nodes[key] = document.createElement(htmlElements[i]);
-    classNames[i] && (nodes[key].className = classNames[i]);
-    types[i] && (nodes[key].type = types[i]);
-    images[i] && (nodes[key].src = images[i].src, nodes[key].alt = images[i].alt);
-    i++
+    task: { element: null, htmlElement: 'li', attr: {class: 'input-group d-flex flex-row'} },
+    box: { element: null, htmlElement: 'div', parent: 'task', attr: { class: 'input-group-text', title: 'Завершить' } },
+    checkbox: { element: null, htmlElement: 'input', parent: 'box', attr: {class: 'form-check-input mt-0', type: 'checkbox', title: 'Отметить выполненное'} },
+    editInput: { element: null, htmlElement: 'input', parent: 'task', attr: { class: 'form-control transparent-input', type: 'text', value: taskString, disabled: true } },
+    editButton: { element: null, htmlElement: 'button', parent: 'task', attr: {class: 'btn btn-outline-secondary', type: 'button', title: 'Изменить'} },
+    editButtonImg: { element: null, htmlElement: 'img', parent: 'editButton', attr: {src: './assets/edit.svg', alt: 'edit'} },
+    removeButton: { element: null, htmlElement: 'button', parent: 'task', attr: {class: 'btn btn-outline-secondary', type: 'button', title: 'Удалить'} },
+    removeButtonImg: { element: null, htmlElement: 'img', parent: 'removeButton', attr: { src: './assets/remove.svg', alt: 'remove' } },
   }
 
-  nodes.editInput.value = taskString;
-  nodes.editInput.disabled = true;
+  for (let key in nodes) {
+    nodes[key].element = document.createElement(nodes[key].htmlElement);
+    const newElement = nodes[key].element;
 
-  nodes.editButton.appendChild(nodes.editButtonImg);
-  nodes.removeButton.appendChild(nodes.removeButtonImg);
-  nodes.box.appendChild(nodes.checkbox);
-  nodes.task.appendChild(nodes.box);
-  nodes.task.appendChild(nodes.editInput);
-  nodes.task.appendChild(nodes.editButton);
-  nodes.task.appendChild(nodes.removeButton);
+    const attributes = nodes[key].attr;
+    for (let prop in attributes) {
+      newElement.setAttribute(prop, attributes[prop]);
+    }
 
-  return nodes.task;
+    if (key !== 'task') {
+      const parentElement = nodes[nodes[key].parent].element;
+      parentElement.appendChild(newElement);
+    }
+  }
+
+  return nodes.task.element;
 }
 
 function addTask(){
