@@ -92,7 +92,15 @@ navigator.geolocation.getCurrentPosition(fetchWeatherData)
 // TODO
 const addTaskInput = document.querySelector('.form-control');
 const incompleteTasksBlock = document.querySelector('.incompleted-tasks');
-const completedTasksBlock=document.querySelector('.completed-tasks');
+const completedTasksBlock = document.querySelector('.completed-tasks');
+
+if (localStorage.getItem('momentum_incompleteTasks') !== null) {
+  const storedData = JSON.parse(localStorage.getItem('momentum_incompleteTasks'));
+  for (let storedTask of storedData) {
+    const task = createTaskElement(storedTask);
+    incompleteTasksBlock.appendChild(task);
+  }
+}
 
 addTaskInput.addEventListener('keypress', handleEnterPress);
 
@@ -102,7 +110,7 @@ function handleEnterPress(event) {
   }
 }
 
-function createNewTask(taskString) {
+function createTaskElement(taskString) {
   const nodes = {
     task: { element: null, htmlElement: 'li', attr: {class: 'input-group d-flex flex-row'} },
     box: { element: null, htmlElement: 'div', parent: 'task', attr: { class: 'input-group-text', title: 'Завершить' } },
@@ -135,8 +143,31 @@ function createNewTask(taskString) {
 function addTask(){
   if (!addTaskInput.value) return;                             // ToDo добавить тостер
 
-  const listItem = createNewTask(addTaskInput.value);
+  const taskDescription = addTaskInput.value;
+  const listItem = createTaskElement(taskDescription);
+
+  if (localStorage.getItem('momentum_incompleteTasks') !== null) {
+    const storedData = JSON.parse(localStorage.getItem('momentum_incompleteTasks'));
+    updateStoredData(storedData, taskDescription);
+  } else {
+    const newData = [taskDescription];
+    setStoredData(newData);
+  }
+
   incompleteTasksBlock.appendChild(listItem);
 
   addTaskInput.value="";
 }
+
+function updateStoredData(storedData, newTask) {
+  storedData.push(newTask)
+  const jsonData = JSON.stringify(storedData);
+  localStorage.setItem('momentum_incompleteTasks', jsonData);
+}
+
+function setStoredData(task) {
+  const jsonData = JSON.stringify(task);
+  localStorage.setItem('momentum_incompleteTasks', jsonData);
+}
+
+
