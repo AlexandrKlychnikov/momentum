@@ -91,14 +91,24 @@ navigator.geolocation.getCurrentPosition(fetchWeatherData)
 
 // TODO
 const addTaskInput = document.querySelector('.form-control');
-const incompleteTasksBlock = document.querySelector('.incompleted-tasks');
+const incompleteTasksBlock = document.querySelector('.incomplete-tasks');
 const completedTasksBlock = document.querySelector('.completed-tasks');
 
 if (localStorage.getItem('momentum_incompleteTasks') !== null) {
   const storedData = JSON.parse(localStorage.getItem('momentum_incompleteTasks'));
   for (let storedTask of storedData) {
-    const task = createTaskElement(storedTask);
+    const task = createTaskElement(storedTask, false);
     incompleteTasksBlock.appendChild(task);
+    bindTaskEvents(task, taskCompleted);
+  }
+}
+
+if (localStorage.getItem('momentum_completedTasks') !== null) {
+  const storedData = JSON.parse(localStorage.getItem('momentum_completedTasks'));
+  for (let storedTask of storedData) {
+    const task = createTaskElement(storedTask, true);
+    completedTasksBlock.appendChild(task);
+    bindTaskEvents(task, taskIncomplete);
   }
 }
 
@@ -110,15 +120,15 @@ function handleEnterPress(event) {
   }
 }
 
-function createTaskElement(taskString) {
+function createTaskElement(taskString, isCompleted) {
   const nodes = {
     task: { element: null, htmlElement: 'li', attr: {class: 'input-group d-flex flex-row'} },
     box: { element: null, htmlElement: 'div', parent: 'task', attr: { class: 'input-group-text', title: 'Завершить' } },
-    checkbox: { element: null, htmlElement: 'input', parent: 'box', attr: {class: 'form-check-input mt-0', type: 'checkbox', title: 'Отметить выполненное'} },
+    checkbox: { element: null, htmlElement: 'input', parent: 'box', attr: {class: 'form-check-input mt-0', type: 'checkbox', title: 'Завершить'} },
     editInput: { element: null, htmlElement: 'input', parent: 'task', attr: { class: 'form-control transparent-input', type: 'text', value: taskString, disabled: true } },
-    editButton: { element: null, htmlElement: 'button', parent: 'task', attr: {class: 'btn btn-outline-secondary', type: 'button', title: 'Изменить'} },
+    editButton: { element: null, htmlElement: 'button', parent: 'task', attr: {class: 'btn edit btn-outline-secondary', type: 'button', title: 'Изменить'} },
     editButtonImg: { element: null, htmlElement: 'img', parent: 'editButton', attr: {src: './assets/edit.svg', alt: 'edit'} },
-    removeButton: { element: null, htmlElement: 'button', parent: 'task', attr: {class: 'btn btn-outline-secondary', type: 'button', title: 'Удалить'} },
+    removeButton: { element: null, htmlElement: 'button', parent: 'task', attr: {class: 'btn remove btn-outline-secondary', type: 'button', title: 'Удалить'} },
     removeButtonImg: { element: null, htmlElement: 'img', parent: 'removeButton', attr: { src: './assets/remove.svg', alt: 'remove' } },
   }
 
@@ -130,6 +140,8 @@ function createTaskElement(taskString) {
     for (let prop in attributes) {
       newElement.setAttribute(prop, attributes[prop]);
     }
+
+    key === 'checkbox' && (newElement.checked = isCompleted);
 
     if (key !== 'task') {
       const parentElement = nodes[nodes[key].parent].element;
@@ -144,30 +156,103 @@ function addTask(){
   if (!addTaskInput.value) return;                             // ToDo добавить тостер
 
   const taskDescription = addTaskInput.value;
-  const listItem = createTaskElement(taskDescription);
+  const task = createTaskElement(taskDescription, false);
 
-  if (localStorage.getItem('momentum_incompleteTasks') !== null) {
-    const storedData = JSON.parse(localStorage.getItem('momentum_incompleteTasks'));
-    updateStoredData(storedData, taskDescription);
-  } else {
-    const newData = [taskDescription];
-    setStoredData(newData);
-  }
+  saveChangeToLocalStorage('momentum_incompleteTasks', 'add', taskDescription)
 
-  incompleteTasksBlock.appendChild(listItem);
+  incompleteTasksBlock.appendChild(task);
+  bindTaskEvents(task, taskCompleted);
 
   addTaskInput.value="";
 }
 
-function updateStoredData(storedData, newTask) {
-  storedData.push(newTask)
+function saveChangeToLocalStorage(key, action, task) {
+  if (localStorage.getItem(key) !== null) {
+    const storedData = JSON.parse(localStorage.getItem(key));
+    updateStoredData(key, action, storedData, task);
+  } else {
+    const newData = [task];
+    setStoredData(key, newData);
+  }
+}
+
+function updateStoredData(key, action, storedData, task) {
+  switch (action) {
+  case 'add':
+    storedData.push(task);
+    break;
+  case 'delete':
+    const index = storedData.indexOf(task);
+    storedData.splice(index, 1);
+    break;
+  }
   const jsonData = JSON.stringify(storedData);
-  localStorage.setItem('momentum_incompleteTasks', jsonData);
+  localStorage.setItem(key, jsonData);
 }
 
-function setStoredData(task) {
+function setStoredData(key, task) {
   const jsonData = JSON.stringify(task);
-  localStorage.setItem('momentum_incompleteTasks', jsonData);
+  localStorage.setItem(key, jsonData);
 }
 
+function taskCompleted() {
+  const listItem = this.parentNode.parentElement;
+  const task = listItem.querySelector("input[type=text]").value;
+  completedTasksBlock.appendChild(listItem);
+  saveChangeToLocalStorage('momentum_completedTasks', 'add', task)
+  saveChangeToLocalStorage('momentum_incompleteTasks', 'delete', task)
+  bindTaskEvents(listItem, taskIncomplete);
+}
 
+function taskIncomplete() {
+  const listItem = this.parentNode.parentElement;
+  const task = listItem.querySelector("input[type=text]").value;
+  incompleteTasksBlock.appendChild(listItem);
+  saveChangeToLocalStorage('momentum_completedTasks', 'delete', task)
+  saveChangeToLocalStorage('momentum_incompleteTasks', 'add', task)
+  bindTaskEvents(listItem,taskCompleted);
+}
+
+function deleteTask() {
+  const listItem = this.parentNode;
+  const taskDescription = listItem.querySelector('.form-control').value;
+  const taskBlock = listItem.parentNode;
+  const key = taskBlock.classList.contains('completed-tasks')
+    ? 'momentum_completedTasks'
+    : 'momentum_incompleteTasks';
+  taskBlock.removeChild(listItem);
+  saveChangeToLocalStorage(key, 'delete', taskDescription);
+}
+
+function editTask() {
+  const listItem = this.parentNode;
+  const taskInput = listItem.querySelector('.form-control')
+  const oldTaskDescription = taskInput.value;
+  taskInput.disabled = false;
+  taskInput.focus();
+  const taskBlock = listItem.parentNode;
+  const key = taskBlock.classList.contains('completed-tasks')
+    ? 'momentum_completedTasks'
+    : 'momentum_incompleteTasks';
+  taskInput.onchange = () => {
+    if (oldTaskDescription !== taskInput.value) {
+      const newTaskDescription = taskInput.value;
+      saveChangeToLocalStorage(key, 'delete', oldTaskDescription);
+      saveChangeToLocalStorage(key, 'add', newTaskDescription);
+      taskInput.disabled = true;
+    }
+  }
+}
+
+function bindTaskEvents(task, checkBoxEventHandler){
+
+  const checkBox = task.querySelector("input[type=checkbox]");
+  const editButton = task.querySelector(".btn.edit");
+  const deleteButton = task.querySelector(".btn.remove");
+
+  editButton.onclick = editTask;
+
+  deleteButton.onclick = deleteTask;
+
+  checkBox.onchange = checkBoxEventHandler;
+}

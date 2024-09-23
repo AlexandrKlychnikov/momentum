@@ -9,6 +9,12 @@ body {
   color: #fff;
 }
 
+hr {
+  width: 250px;
+  margin: 0 auto;
+  border: 1px solid #000;
+}
+
 section {
   width: 100%;
 }

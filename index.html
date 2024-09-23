@@ -21,12 +21,15 @@
         <p class="date m-0"></p>
       </section>
 
-      <section class="todo d-flex flex-column justify-content-start gap-3">
+      <section class="todo d-flex flex-column justify-content-start gap-4">
         <div class="d-flex justify-content-center align-items-center">
           <input class="new-task form-control transparent-input ms-3" type="text" id="custom-text" placeholder="Добавить задачу">
         </div>
-        <ul class="incompleted-tasks d-flex flex-column justify-content-center align-items-center gap-1 m-0 ps-3"></ul>
-        <ul class="completed-tasks"></ul>
+        <ul class="incomplete-tasks d-flex flex-column justify-content-center align-items-center gap-1 m-0 ps-3">
+        </ul>
+          <hr>
+        <ul class="completed-tasks d-flex flex-column justify-content-center align-items-center gap-1 m-0 ps-3">
+        </ul>
       </section>
     </main>
     <script src="scripts.js"></script>
